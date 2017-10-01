@@ -15,36 +15,34 @@ app.config(function($stateProvider, $urlRouterProvider) {
     });
 });
 
-app.controller('LoginController', function($scope, $state, $http, LoginService) {
+app.controller('LoginController', function($scope, $state, $http/*, LoginService*/) {
     $scope.formSubmit = function() {
-        console.log("LoginController:" + $scope.username + "," + $scope.password);
-        this.users = [];
         $http({
             url: '/login',
-            method: "POST"
+            method: "POST",
+            data: $.param({ username: $scope.username, password: $scope.password }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function (response) {
-          this.users = response.data;  
-
-          console.log("users=" + response.data + "," + $scope.username + "," + $scope.password);
-          if (LoginService.login($scope.username, $scope.password)) {
-              $scope.error = '';
-              $scope.username = '';
-              $scope.password = '';
-              $state.transitionTo('home');
-          } else {
-              $scope.error = "Incorrect username/password !";
-          }   
-
-        }.bind(this));
-
-        
+            //console.log("response" + JSON.stringify(response));
+            //console.log("code=" + response.data.code + "," + "success=" + response.data.success);
+            //if (LoginService.login($scope.username, $scope.password)) {
+            if (response.data.code != 200)
+            {
+                $scope.error = response.data.success;
+            } else {
+                //$scope.error = '';
+                //$scope.username = '';
+                //$scope.password = '';
+                $state.transitionTo('home');
+            }
+        }.bind(this));     
     };
 });
 
-app.controller('HomeController', function($scope, $state, LoginService) {
+app.controller('HomeController', function($scope, $state/*, LoginService*/) {
 });
 
-app.factory('LoginService', function() {
+/*app.factory('LoginService', function() {
     var isAuthenticated = false;
    
     return {
@@ -53,5 +51,4 @@ app.factory('LoginService', function() {
             return isAuthenticated;
         }        
     };
-});
-
+});*/

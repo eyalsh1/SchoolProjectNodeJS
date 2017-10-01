@@ -31,11 +31,13 @@ con.connect(
 app.post('/login', urlParse, function (req, res) {
     if (!req.body) 
 		return res.sendStatus(400);
-		
-    var username= req.body.username;
-	var password = req.body.password;
+        
+    console.log(req.body);    
+    var username = req.body.username;
+    var password = req.body.password;
+    //var {username, password} = req.body;
 	
-    console.log("Login attempt received:" + username + "," + password); // Why do I get undifined?
+    console.log("Login attempt received:" + username + "," + password); // Why do I get undefined?
 
     // select
     con.query(
@@ -46,7 +48,7 @@ app.post('/login', urlParse, function (req, res) {
                 console.log("error ocurred",error);
                 res.send({
                     "code":400,
-                    "failed":"error ocurred"
+                    "failed":"error ocurred!"
                 })
             } else {
                 console.log('The solution is: ', results);
@@ -59,13 +61,13 @@ app.post('/login', urlParse, function (req, res) {
                     } else{
                         res.send({
                             "code":204,
-                            "success":"Email and password does not match"
+                            "success":"Email and password does not match!"
                         });
                     }
                 } else{
                     res.send({
                         "code":204,
-                        "success":"Email does not exits"
+                        "success":"Email does not exits!"
                     });
                 }
             }
