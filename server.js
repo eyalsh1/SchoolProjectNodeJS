@@ -32,12 +32,12 @@ app.post('/login', urlParse, function (req, res) {
     if (!req.body) 
 		return res.sendStatus(400);
         
-    console.log(req.body);    
+    //console.log(req.body);    
     var username = req.body.username;
     var password = req.body.password;
     //var {username, password} = req.body;
 	
-    console.log("Login attempt received:" + username + "," + password); // Why do I get undefined?
+    //console.log("Login attempt received:" + username + "," + password);
 
     // select
     con.query(
@@ -51,7 +51,7 @@ app.post('/login', urlParse, function (req, res) {
                     "failed":"error ocurred!"
                 })
             } else {
-                console.log('The solution is: ', results);
+                //console.log('The solution is: ', results);
                 if (results.length > 0) {
                     if (results[0].password == password) {
                         res.send({
@@ -83,3 +83,110 @@ var port = 4000;
 app.listen(port, function () {
 	console.log('Server listening on port ' + port);
 });
+
+/*app.get('/home', function (req, res) {
+	res.set({"Content-Type": "text/html; charset=utf-8"});
+	res.send('<h1>home page</h1>');
+})
+
+app.get('/books', function (req, res) {
+	res.set({"Content-Type": "text/html; charset=utf-8"});
+	fs.readFile('books.json', 'utf-8', function (err, data) {
+		if (err) {throw new Error(err)}
+
+		res.set({'Content-Type': 'application/json'})
+		res.send(data);
+		//res.json(data);
+	});
+})
+
+app.get('/', function (req, res) {
+	res.set({"Content-Type": "text/html; charset=utf-8"});
+	//res.send('<h1>home page</h1>');
+	fs.readFile('users.json', 'utf-8', function (err, data) {
+		if (err) {throw new Error(err);}
+
+		var output = '<ul>';
+		users = JSON.parse(data);
+		for(var i = 0; i < users.length; i++) {
+		    //console.log(users[i].id + "," + users[i].name);
+		    output += ('<li>' + users[i].name + '</li>');
+		}
+		output += '</ul>';
+
+		res.set({"Content-Type": "text/html; charset=utf-8"});
+		res.send(output);
+	});
+})
+
+app.get('/users', function (req, res) {
+	fs.readFile('users.json', 'utf-8', function (err, data) {
+		if (err) {throw new Error(err);}
+
+		res.set({"Content-Type": "application/json"});
+		res.send(data);
+	});
+})
+
+app.get('/users/:id', function (req, res) {
+	var userId = parseInt(req.params['id']);
+
+	fs.readFile('users.json', 'utf-8', function (err, data) {
+		if (err) {throw new Error(err);}
+
+		var users = JSON.parse(data);
+		var user = users.find(function (user) {
+			return user.id === userId
+		})
+
+		res.set({"Content-Type": "application/json"});
+		res.send(JSON.stringify(user));
+	});
+})
+
+app.post('/users', function (req, res) {
+	var data = '';
+	req.on('data', function (chunk) {
+		data += chunk;
+	})
+	req.on('end', function () {
+		var newUser = JSON.parse(data);
+		fs.readFile('users.json', 'utf-8', function (err, data) {
+			if (err) {throw new Error(err);}
+
+			var users = JSON.parse(data);
+			users.push(newUser);
+			
+			fs.writeFile('users.json', JSON.stringify(users, '', 4), 'utf-8', function (err) {
+				if (err) {throw new Error(err);}
+				res.sendStatus(201);
+			});
+		});
+	})
+})
+
+app.delete('/:id', function (req, res) {
+	var userId = parseInt(req.params['id']);
+	fs.readFile('users.json', 'utf-8', function (err, data) {
+		if (err) {throw new Error(err);}
+
+		var users = JSON.parse(data);
+		var index = users.findIndex(function (user) {
+			return user.id === userId
+		})
+		
+		if (index < 0)
+		{
+			console.log("User not found!");
+			res.sendStatus(404);
+		}
+		else {
+			users.splice(index, 1);
+			fs.writeFile('users.json', JSON.stringify(users, '', 4), 'utf-8', function (err) {
+				if (err) {throw new Error(err);}
+				res.sendStatus(204);
+			});
+		}
+	});
+})
+*/
