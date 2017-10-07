@@ -1,13 +1,41 @@
-<div class="col-md-12">
+    </div><div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-5"><h4>Courses</h4></div>
+                <div class="col-sm-1"><a href="#!/insertCourse"><button type="button" class="btn">+</button></a></div>
+                <div class="col-sm-5"><h4>Students</h4></div>
+                <div class="col-sm-1"><a href="#!/insertStudent"><button type="button" class="btn">+</button></a></div>
+
+                <div class="col-sm-6">
+                    <ul ng-repeat="course in courses">
+                        <a href="/course/{{course.id}}">
+                        <figure><img src="img/courses/{{course.image}}" width=100% height=30%>
+                        <figcaption style=color:blue;>{{course.name}}</figcaption>
+                        <figcaption style=color:blue;>{{course.description}}</figcaption></a></figure><br>
+                    </ul>
+                </div>  
+
+                <div class="col-sm-6">
+                    <ul ng-repeat="student in students">
+                        <a href="/student/{{student.id}}">
+                        <figure><img src="img/students/{{student.image}}" width=100% height=30%>
+                        <figcaption style=color:blue;>{{student.name}}</figcaption>
+                        <figcaption style=color:blue;>{{student.phone}}</figcaption></a></figure><br>
+                    </ul>
+                </div>  
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12"><h1>School summary</h1></div>
+                <div class="col-sm-12"><h2>Courses amount is {{courses.length}}</h2></div>
+                <div class="col-sm-12"><h2>Students amount is {{students.length}}</h2></div>
+            </div>
+        </div>
+    </div>
+
+<!--<div class="col-md-12">
     <h3>School Page</h3>
-
-    <table ng-controller="schoolCtrl" border="1">
-        <tr ng-repeat="course in courses">
-          <td>{{course.id}}</td>
-          <td>{{course.name}}</td>
-          <td>{{course.description}}</td>   
-        </tr>
-    </table>
-
     <a ui-sref="login">Back</a>
-</div>
+</div>-->

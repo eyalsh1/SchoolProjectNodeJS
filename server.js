@@ -76,11 +76,30 @@ app.post('/login', urlParse, function (req, res) {
         });
 });
 
-app.get('/school', urlParse, function (req, res) {
-	console.log("school received");
+app.get('/courses', urlParse, function (req, res) {
+	//console.log("courses received");
 	res.set({"Content-Type": "text/html; charset=utf-8"});
 	con.query(
         `select * from courses`, 
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				console.log(results);
+                res.send(results);
+            }
+        });
+});
+
+app.get('/students', urlParse, function (req, res) {
+	//console.log("courses received");
+	res.set({"Content-Type": "text/html; charset=utf-8"});
+	con.query(
+        `select * from students`, 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);

@@ -54,13 +54,17 @@ app.controller('schoolCtrl', function($scope, $rootScope, $state, $http/*LoginSe
     //console.log("schoolCtrl");
     $rootScope.IsVisible = true;
 
-    $http({url: '/school'}).then(function (response) {
+    $http({url: '/courses'}).then(function (response) {
         //console.log(response);
         $scope.courses = response.data;
         /*response.data.forEach(function(element) {
             console.log(element.name);
         }, this);*/
-    }.bind(this))
+    }.bind(this));
+
+    $http({url: '/students'}).then(function (response) {
+        $scope.students = response.data;
+    }.bind(this));
 });
 
 app.controller('adminCtrl', function($scope, $state, $rootScope/*LoginService*/) {
