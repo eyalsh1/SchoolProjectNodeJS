@@ -1,0 +1,13 @@
+<div class="col-md-12">
+    <h3>School Page</h3>
+
+    <table ng-controller="schoolCtrl" border="1">
+        <tr ng-repeat="course in courses">
+          <td>{{course.id}}</td>
+          <td>{{course.name}}</td>
+          <td>{{course.description}}</td>   
+        </tr>
+    </table>
+
+    <a ui-sref="login">Back</a>
+</div>

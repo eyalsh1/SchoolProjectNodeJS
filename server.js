@@ -1,7 +1,9 @@
 const mysql = require('mysql');
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
+const passwordHash = require('password-hash');
+//const fs = require('fs');
+
 const app = express();
 const urlParse = bodyParser.urlencoded({extended: false});
 
@@ -13,7 +15,7 @@ const con = mysql.createConnection(
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'login_test'
+        database: 'school_db'
     }
 );
 
@@ -41,11 +43,10 @@ app.post('/login', urlParse, function (req, res) {
 
     // select
     con.query(
-        `select * from users where name=?`, [username], 
-        //`select * from users where name="eyal"`,
+        `select * from admins where email=?`, [username], 
         function (error, results, fields) {
             if (error) {
-                console.log("error ocurred",error);
+                console.log("error ocurred", error);
                 res.send({
                     "code":400,
                     "failed":"error ocurred!"
@@ -53,7 +54,8 @@ app.post('/login', urlParse, function (req, res) {
             } else {
                 //console.log('The solution is: ', results);
                 if (results.length > 0) {
-                    if (results[0].password == password) {
+                    //if (results[0].password == password) {
+					if (passwordHash.verify(password, results[0].password)) {
                         res.send({
                             "code":200,
                             "success":"login sucessfull"
@@ -72,11 +74,25 @@ app.post('/login', urlParse, function (req, res) {
                 }
             }
         });
+});
 
-    /*const passwordHash = require('password-hash');
-    var hashedPassword = passwordHash.generate(req.body.password);
-    res.send('Welcome: ' + req.body.username + ',' + req.body.password + "," + hashedPassword);
-    console.log(passwordHash.verify('1234', hashedPassword));*/
+app.get('/school', urlParse, function (req, res) {
+	console.log("school received");
+	res.set({"Content-Type": "text/html; charset=utf-8"});
+	con.query(
+        `select * from courses`, 
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				console.log(results);
+                res.send(results);
+            }
+        });
 });
 
 var port = 4000;

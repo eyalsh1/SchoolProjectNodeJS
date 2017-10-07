@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div class="container" ng-app="myApp"> <!--ng-controller="IndexController"-->
+    <div class="container" ng-app="myApp"> <!--ng-controller="myCtrl as my"-->
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
@@ -23,8 +23,8 @@
                         <img ng-src="img/logo/school_img.png" alt="school_img" width="100px" height="100px">
                     </div>
                     <ul class="nav navbar-nav" style="margin-left: 100px; margin-top: 24px" ng-show="IsVisible">
-                        <li><a class="btn btn-default" href="#!School" style="width: 150px">School</a></li>
-                        <li><a class="btn btn-default" href="#!Administration" style="width: 150px; margin-left: 10px">Administration</a></li>
+                        <li><a class="btn btn-default" href="#!/school" style="width: 150px">School</a></li>
+                        <li><a class="btn btn-default" href="#!/administration" style="width: 150px; margin-left: 10px">Administration</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" ng-show="IsVisible">
                         <li><a href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
