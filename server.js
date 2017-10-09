@@ -78,7 +78,7 @@ app.post('/login', urlParse, function (req, res) {
 
 app.get('/courses', urlParse, function (req, res) {
 	//console.log("courses received");
-	res.set({"Content-Type": "text/html; charset=utf-8"});
+	//res.set({"Content-Type": "text/html; charset=utf-8"});
 	con.query(
         `select * from courses`, 
         function (error, results, fields) {
@@ -89,7 +89,7 @@ app.get('/courses', urlParse, function (req, res) {
                     "failed":"error ocurred!"
                 })
             } else {
-				console.log(results);
+				//console.log(results);
                 res.send(results);
             }
         });
@@ -97,7 +97,7 @@ app.get('/courses', urlParse, function (req, res) {
 
 app.get('/students', urlParse, function (req, res) {
 	//console.log("courses received");
-	res.set({"Content-Type": "text/html; charset=utf-8"});
+	//res.set({"Content-Type": "text/html; charset=utf-8"});
 	con.query(
         `select * from students`, 
         function (error, results, fields) {
@@ -108,11 +108,36 @@ app.get('/students', urlParse, function (req, res) {
                     "failed":"error ocurred!"
                 })
             } else {
-				console.log(results);
+				//console.log(results);
                 res.send(results);
             }
         });
 });
+
+app.get('/admins', urlParse, function (req, res) {
+	//console.log("admins received");
+	//res.set({"Content-Type": "text/html; charset=utf-8"});
+	con.query(
+        `SELECT admins.id as id, admins.name as name, admins.phone as phone, admins.email as email, admins.image as image, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id`, 
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				//console.log(results);
+                res.send(results);
+            }
+        });
+});
+
+/*app.get('/course/:id', function (req, res) {
+	var courseId = parseInt(req.params['id']);
+
+	res.send("CorseId = " + courseId);
+});*/
 
 var port = 4000;
 app.listen(port, function () {

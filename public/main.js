@@ -17,10 +17,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
         url : '/administration',
         templateUrl : 'administration.html',
         controller : 'adminCtrl'
+    })
+    .state('school.course', {
+        url : '/course/:id',
+        templateUrl : 'showCourse.html',
+        controller : 'adminCtrl'
     });
 });
 
-app.controller('loginCtrl', function($scope, $rootScope, $state, $http/*, LoginService*/) {
+app.controller('loginCtrl', function($scope, $rootScope, $state, $http) {
     $rootScope.IsVisible = false;
     $scope.username = 'eyal.shalom@gmail.com';
     $scope.password = '1234';
@@ -50,7 +55,7 @@ app.controller('loginCtrl', function($scope, $rootScope, $state, $http/*, LoginS
 
 /*app.controller("myCtrl", function() {});*/
 
-app.controller('schoolCtrl', function($scope, $rootScope, $state, $http/*LoginService*/) {
+app.controller('schoolCtrl', function($scope, $rootScope, $http) {
     //console.log("schoolCtrl");
     $rootScope.IsVisible = true;
 
@@ -67,9 +72,12 @@ app.controller('schoolCtrl', function($scope, $rootScope, $state, $http/*LoginSe
     }.bind(this));
 });
 
-app.controller('adminCtrl', function($scope, $state, $rootScope/*LoginService*/) {
+app.controller('adminCtrl', function($scope, $rootScope, $http) {
     //console.log("adminCtrl");
-    //$rootScope.IsVisible = true;
+    $rootScope.IsVisible = true;
+    $http({url: '/admins'}).then(function (response) {
+        $scope.admins = response.data;
+    }.bind(this));
 });
 
 /*app.component('school', {
