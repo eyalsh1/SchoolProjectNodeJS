@@ -1,6 +1,6 @@
 var app = angular.module('myApp', ['ui.router']);
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('/login');
     $stateProvider
     .state('login', {
@@ -16,13 +16,25 @@ app.config(function($stateProvider, $urlRouterProvider) {
     .state('administration', {
         url : '/administration',
         templateUrl : 'administration.html',
-        controller : 'adminCtrl'
+        controller : 'administrationCtrl'
     })
-    .state('school.course', {
+    .state('course', {
         url : '/course/:id',
         templateUrl : 'showCourse.html',
+        controller : 'courseCtrl'
+    })
+    .state('student', {
+        url : '/student/:id',
+        templateUrl : 'showStudent.html',
+        controller : 'studentCtrl'
+    })
+    .state('admin', {
+        url : '/admin/:id',
+        templateUrl : 'showAdmin.html',
         controller : 'adminCtrl'
     });
+
+    $locationProvider.html5Mode(true);
 });
 
 app.controller('loginCtrl', function($scope, $rootScope, $state, $http) {
@@ -72,11 +84,53 @@ app.controller('schoolCtrl', function($scope, $rootScope, $http) {
     }.bind(this));
 });
 
-app.controller('adminCtrl', function($scope, $rootScope, $http) {
+app.controller('administrationCtrl', function($scope, $rootScope, $http) {
     //console.log("adminCtrl");
     $rootScope.IsVisible = true;
     $http({url: '/admins'}).then(function (response) {
         $scope.admins = response.data;
+    }.bind(this));
+});
+
+app.controller('courseCtrl', function($scope, $rootScope, $http) {
+    //console.log($scope);
+    //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
+    $http({url: '/course/' + $scope.$resolve.$stateParams.id}).then(function (response) {
+        //var data = response.data[0];
+        $scope.id = response.data[0].id;
+        $scope.name = response.data[0].name;
+        $scope.description = response.data[0].description;
+        $scope.image = response.data[0].image;
+        //console.log(data);
+    }.bind(this)); 
+});
+
+app.controller('studentCtrl', function($scope, $rootScope, $http) {
+    //console.log($scope);
+    //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
+    $http({url: '/student/' + $scope.$resolve.$stateParams.id}).then(function (response) {
+        //var data = response.data[0];
+        $scope.id = response.data[0].id;
+        $scope.phone = response.data[0].phone;
+        $scope.email = response.data[0].email;
+        $scope.image = response.data[0].image;
+        $scope.course_id = response.data[0].course_id;
+        //console.log(data);
+    }.bind(this));
+});
+
+app.controller('adminCtrl', function($scope, $rootScope, $http) {
+    //console.log($scope);
+    //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
+    $http({url: '/admin/' + $scope.$resolve.$stateParams.id}).then(function (response) {
+        //var data = response.data[0];
+        $scope.id = response.data[0].id;
+        $scope.name = response.data[0].name;
+        $scope.phone = response.data[0].phone;
+        $scope.email = response.data[0].email;
+        $scope.image = response.data[0].image;
+        $scope.role = response.data[0].role;
+        //console.log(data);
     }.bind(this));
 });
 

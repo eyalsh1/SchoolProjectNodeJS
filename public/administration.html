@@ -9,7 +9,7 @@
                 <a href="/admin/{{admin.id}}">
                     <figure>
                         <img src="img/admins/{{admin.image}}" width=100% height=200px>
-                        <figcaption style=color:blue;>{{admin.name}}</figcaption>
+                        <figcaption style=color:blue;>{{admin.name}}, {{admin.role}}</figcaption>
                         <figcaption style=color:blue;>{{admin.phone}}</figcaption>
                         <figcaption style=color:blue;>{{admin.email}}</figcaption>
                     </figure>
@@ -26,8 +26,3 @@
         <div class="col-sm-12"><h3>{{admins.length}} Administrators</h3></div>
     </div>
 </div>
-
-<!--<div class="col-md-12">
-    <h3>Administration Page</h3>
-    <a ui-sref="login">Back</a>
-</div>-->

@@ -43,7 +43,7 @@ app.post('/login', urlParse, function (req, res) {
 
     // select
     con.query(
-        `select * from admins where email=?`, [username], 
+        `SELECT * FROM admins WHERE email=?`, [username], 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -80,7 +80,7 @@ app.get('/courses', urlParse, function (req, res) {
 	//console.log("courses received");
 	//res.set({"Content-Type": "text/html; charset=utf-8"});
 	con.query(
-        `select * from courses`, 
+        `SELECT * FROM courses`, 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -99,7 +99,7 @@ app.get('/students', urlParse, function (req, res) {
 	//console.log("courses received");
 	//res.set({"Content-Type": "text/html; charset=utf-8"});
 	con.query(
-        `select * from students`, 
+        `SELECT * FROM students`, 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -133,11 +133,57 @@ app.get('/admins', urlParse, function (req, res) {
         });
 });
 
-/*app.get('/course/:id', function (req, res) {
-	var courseId = parseInt(req.params['id']);
+app.get('/course/:id', function (req, res) {
+	con.query(
+        `SELECT * FROM courses WHERE id=` + req.params['id'], 
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				//console.log(results);
+                res.send(results);
+            }
+        });
+});
 
-	res.send("CorseId = " + courseId);
-});*/
+app.get('/student/:id', function (req, res) {
+	con.query(
+        `SELECT * FROM students WHERE id=` + req.params['id'], 
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				//console.log(results);
+                res.send(results);
+            }
+        });
+});
+
+app.get('/admin/:id', function (req, res) {
+	con.query(
+		//`SELECT * FROM admins WHERE id=` + req.params['id'], 
+		`SELECT admins.id as id, admins.name as name, admins.phone as phone, admins.email as email, admins.image as image, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=` + req.params['id'],
+        function (error, results, fields) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+				//console.log(results);
+                res.send(results);
+            }
+        });
+});
 
 var port = 4000;
 app.listen(port, function () {
