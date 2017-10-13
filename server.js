@@ -15,12 +15,18 @@ const con = mysql.createConnection(
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'school_db'
+        database: 'school_db',
+        multipleStatements: true
     }
 );
 
 // connect
-con.connect( 
+con.connect(function(err) {
+	if (err) throw err;
+	console.log("Connected!");
+});
+
+/*con.connect( 
     err => {
         if (err) {
             console.log('Error connecting to DB:' + err);
@@ -28,7 +34,7 @@ con.connect(
         }
         console.log('Connected');
     }
-);
+);*/
 
 app.post('/login', urlParse, function (req, res) {
     if (!req.body) 
@@ -134,8 +140,8 @@ app.get('/admins', urlParse, function (req, res) {
 });
 
 app.get('/course/:id', function (req, res) {
-	con.query(
-        `SELECT * FROM courses WHERE id=` + req.params['id'], 
+    con.query(
+        `SELECT name, description, image FROM courses WHERE id=?; SELECT name FROM students WHERE course_id=?`, [req.params['id'], req.params['id']], 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -144,15 +150,17 @@ app.get('/course/:id', function (req, res) {
                     "failed":"error ocurred!"
                 })
             } else {
-				//console.log(results);
+                //console.log(results[0]);
+                //console.log(results[1]);
                 res.send(results);
             }
         });
+
 });
 
 app.get('/student/:id', function (req, res) {
 	con.query(
-        `SELECT * FROM students WHERE id=` + req.params['id'], 
+        `SELECT * FROM students WHERE id=?`, [req.params['id']], 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -170,7 +178,7 @@ app.get('/student/:id', function (req, res) {
 app.get('/admin/:id', function (req, res) {
 	con.query(
 		//`SELECT * FROM admins WHERE id=` + req.params['id'], 
-		`SELECT admins.id as id, admins.name as name, admins.phone as phone, admins.email as email, admins.image as image, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=` + req.params['id'],
+		`SELECT admins.id as id, admins.name as name, admins.phone as phone, admins.email as email, admins.image as image, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=?`, [req.params['id']],
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);

@@ -72,7 +72,7 @@ app.controller('schoolCtrl', function($scope, $rootScope, $http) {
     $rootScope.IsVisible = true;
 
     $http({url: '/courses'}).then(function (response) {
-        //console.log(response);
+        //console.log(response.data);
         $scope.courses = response.data;
         /*response.data.forEach(function(element) {
             console.log(element.name);
@@ -96,12 +96,12 @@ app.controller('courseCtrl', function($scope, $rootScope, $http) {
     //console.log($scope);
     //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
     $http({url: '/course/' + $scope.$resolve.$stateParams.id}).then(function (response) {
-        //var data = response.data[0];
-        $scope.id = response.data[0].id;
-        $scope.name = response.data[0].name;
-        $scope.description = response.data[0].description;
-        $scope.image = response.data[0].image;
-        //console.log(data);
+        //console.log(response.data[0]);
+        $scope.name = response.data[0][0].name;
+        $scope.description = response.data[0][0].description;
+        $scope.image = response.data[0][0].image;
+        //console.log(response.data[1]);
+        $scope.students = response.data[1];
     }.bind(this)); 
 });
 
@@ -129,7 +129,7 @@ app.controller('adminCtrl', function($scope, $rootScope, $http) {
         $scope.phone = response.data[0].phone;
         $scope.email = response.data[0].email;
         $scope.image = response.data[0].image;
-        $scope.role = response.data[0].role;
+        $scope.role = response.data[0].role; 
         //console.log(data);
     }.bind(this));
 });
