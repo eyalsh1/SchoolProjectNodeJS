@@ -56,16 +56,19 @@ app.controller('loginCtrl', function($scope, $rootScope, $state, $http) {
             {
                 $scope.error = response.data.success;
             } else {
-                //$scope.error = '';
-                //$scope.username = '';
-                //$scope.password = '';
+                //console.log(response.data.data);
+                $rootScope.loginName = response.data.data[0].name;
+                $rootScope.loginRole = response.data.data[0].role;
+                $rootScope.loginImage = response.data.data[0].image;
                 $state.transitionTo('school');
             }
         }.bind(this));        
     };
 });
 
-/*app.controller("myCtrl", function() {});*/
+app.controller("myCtrl", function($scope) {
+
+});
 
 app.controller('schoolCtrl', function($scope, $rootScope, $http) {
     //console.log("schoolCtrl");
@@ -105,29 +108,29 @@ app.controller('courseCtrl', function($scope, $rootScope, $http) {
     }.bind(this)); 
 });
 
-app.controller('studentCtrl', function($scope, $rootScope, $http) {
+app.controller('studentCtrl', function($scope, $http) {
     //console.log($scope);
     //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
     $http({url: '/student/' + $scope.$resolve.$stateParams.id}).then(function (response) {
         //var data = response.data[0];
-        $scope.id = response.data[0].id;
+        $scope.name = response.data[0].name;
         $scope.phone = response.data[0].phone;
         $scope.email = response.data[0].email;
         $scope.image = response.data[0].image;
-        $scope.course_id = response.data[0].course_id;
+        $scope.course = response.data[0].course;
         //console.log(data);
     }.bind(this));
 });
 
-app.controller('adminCtrl', function($scope, $rootScope, $http) {
+app.controller('adminCtrl', function($scope, $http) {
     //console.log($scope);
     //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
     $http({url: '/admin/' + $scope.$resolve.$stateParams.id}).then(function (response) {
         //var data = response.data[0];
-        $scope.id = response.data[0].id;
         $scope.name = response.data[0].name;
         $scope.phone = response.data[0].phone;
         $scope.email = response.data[0].email;
+        $scope.password = response.data[0].password;
         $scope.image = response.data[0].image;
         $scope.role = response.data[0].role; 
         //console.log(data);

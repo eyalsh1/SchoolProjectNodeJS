@@ -49,7 +49,8 @@ app.post('/login', urlParse, function (req, res) {
 
     // select
     con.query(
-        `SELECT * FROM admins WHERE email=?`, [username], 
+        //`SELECT * FROM admins WHERE email=?`, [username], 
+        `SELECT admins.name as name, admins.email as email, admins.password as password, admins.image as image, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE email=?`, [username], 
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -64,7 +65,8 @@ app.post('/login', urlParse, function (req, res) {
 					if (passwordHash.verify(password, results[0].password)) {
                         res.send({
                             "code":200,
-                            "success":"login sucessfull"
+                            "success":"login sucessfull",
+                            "data": results
                         });
                     } else{
                         res.send({
@@ -160,7 +162,7 @@ app.get('/course/:id', function (req, res) {
 
 app.get('/student/:id', function (req, res) {
 	con.query(
-        `SELECT * FROM students WHERE id=?`, [req.params['id']], 
+        `SELECT students.name as name, students.phone as phone, students.email as email, students.image as image, courses.name as course FROM students INNER JOIN courses on students.course_id = courses.id WHERE students.id=?`, [req.params['id']],
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
@@ -177,8 +179,7 @@ app.get('/student/:id', function (req, res) {
 
 app.get('/admin/:id', function (req, res) {
 	con.query(
-		//`SELECT * FROM admins WHERE id=` + req.params['id'], 
-		`SELECT admins.id as id, admins.name as name, admins.phone as phone, admins.email as email, admins.image as image, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=?`, [req.params['id']],
+		`SELECT admins.name as name, admins.phone as phone, admins.email as email, admins.password as password, admins.image as image, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=?`, [req.params['id']],
         function (error, results, fields) {
             if (error) {
                 console.log("error ocurred", error);
