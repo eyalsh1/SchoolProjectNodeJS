@@ -136,6 +136,25 @@ app.controller('adminCtrl', function($scope, $http) {
         $scope.roles = response.data[1];
         //console.log(response.data[1]);
     }.bind(this));
+
+    var file = document.querySelector('input.admin_img');
+    file.addEventListener('change', function (e) {
+        //console.log(e.target.files[0]);
+
+        var data = new FormData();
+        data.append('img', e.target.files[0])
+
+        fetch('upload', {
+            body: data,
+            method: "POST"
+        }).then(function (response) {
+            //console.log(response);
+            return response.text()
+        }).then(function (body) {
+            //console.log(body);
+            document.querySelector('img.admin_img').src = 'img/Admins/' + e.target.files[0].name;
+        });
+    });
 });
 
 /*app.component('school', {

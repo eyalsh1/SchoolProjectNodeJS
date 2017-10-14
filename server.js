@@ -2,7 +2,9 @@ const mysql = require('mysql');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passwordHash = require('password-hash');
-//const fs = require('fs');
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({dest: './public/img/tmp'});
 
 const app = express();
 const urlParse = bodyParser.urlencoded({extended: false});
@@ -197,6 +199,21 @@ app.get('/admin/:id', function (req, res) {
                 res.send(results);
             }
         });
+});
+
+app.post('/upload', upload.single('img'), function (req, res) {
+	//console.log(req.file);
+	if (req.file.mimetype === 'image/jpeg' || req.file.mimetype === 'image/png') {
+		fs.rename(req.file.path, 'public/img/Admins/' + req.file.originalname, function (err) {
+			if (err) {throw new Error(err);}
+			res.send('<h1>uploaded successfully</h1>');
+		})
+	} else {
+		fs.unlink(req.file.path, function (err) {
+			if (err) {throw new Error(err);}
+			res.send('<h1>it\'s not correct mimetype</h1>');
+		});
+	}
 });
 
 var port = 4000;
