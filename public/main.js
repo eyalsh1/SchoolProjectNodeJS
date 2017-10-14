@@ -7,31 +7,38 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         url : '/login',
         templateUrl : 'login.html',
         controller : 'loginCtrl'
-    })
-    .state('school', {
+    }).state('school', {
         url : '/school',
         templateUrl : 'school.html',
         controller : 'schoolCtrl',
-    })
-    .state('administration', {
+    }).state('administration', {
         url : '/administration',
         templateUrl : 'administration.html',
         controller : 'administrationCtrl'
-    })
-    .state('course', {
+    }).state('course', {
         url : '/course/:id',
         templateUrl : 'showCourse.html',
         controller : 'courseCtrl'
-    })
-    .state('student', {
+    }).state('student', {
         url : '/student/:id',
         templateUrl : 'showStudent.html',
         controller : 'studentCtrl'
-    })
-    .state('admin', {
+    }).state('editAdmin', {
         url : '/admin/:id',
-        templateUrl : 'showAdmin.html',
-        controller : 'adminCtrl'
+        templateUrl : 'addEditAdmin.html',
+        controller : 'editAdminCtrl'
+    }).state('addAdmin', {
+        url : '/administration/add',
+        templateUrl : 'addEditAdmin.html',
+        controller : 'addAdminCtrl'
+    }).state('addStudent', {
+        url : '/student/add',
+        templateUrl : 'addStudent.html',
+        controller : 'addStudentCtrl'
+    }).state('addCourse', {
+        url : '/course/add',
+        templateUrl : 'addCourse.html',
+        controller : 'addCourseCtrl'
     });
 
     $locationProvider.html5Mode(true);
@@ -87,7 +94,6 @@ app.controller('schoolCtrl', function($scope, $rootScope, $http) {
 });
 
 app.controller('administrationCtrl', function($scope, $rootScope, $http) {
-    //console.log("adminCtrl");
     $rootScope.IsVisible = true;
     $http({url: '/admins'}).then(function (response) {
         $scope.admins = response.data;
@@ -121,9 +127,11 @@ app.controller('studentCtrl', function($scope, $http) {
     }.bind(this));
 });
 
-app.controller('adminCtrl', function($scope, $http) {
+app.controller('editAdminCtrl', function($scope, $http) {
     //console.log($scope);
     //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
+    $scope.title = "Edit";
+    $scope.deleteBtnVisible = true;
     $http({url: '/admin/' + $scope.$resolve.$stateParams.id}).then(function (response) {
         //console.log(response.data[0]);
         $scope.name = response.data[0][0].name;
@@ -137,37 +145,43 @@ app.controller('adminCtrl', function($scope, $http) {
         //console.log(response.data[1]);
     }.bind(this));
 
-    var file = document.querySelector('input.admin_img');
-    file.addEventListener('change', function (e) {
-        //console.log(e.target.files[0]);
+    UploadFile('Admins');
+});
 
+app.controller('addAdminCtrl', function($scope, $http) {
+    $scope.title = "Add";
+    $scope.deleteBtnVisible = false;
+    $http({url: '/roles'}).then(function (response) {
+        $scope.roles = response.data;
+    }.bind(this));
+
+    UploadFile('Admins');
+});
+
+app.controller('addStudentCtrl', function($scope, $http) {
+    $http({url: '/courses'}).then(function (response) {
+        $scope.courses = response.data;
+    }.bind(this));
+    UploadFile('Students');
+});
+
+app.controller('addCourseCtrl', function($scope, $http) {
+    UploadFile('Courses');
+});
+
+function UploadFile(type) {
+    var file = document.querySelector('input.class_img');
+    file.addEventListener('change', function (e) {
         var data = new FormData();
         data.append('img', e.target.files[0])
 
-        fetch('upload', {
+        fetch('upload/' + type, {
             body: data,
             method: "POST"
         }).then(function (response) {
-            //console.log(response);
             return response.text()
         }).then(function (body) {
-            //console.log(body);
-            document.querySelector('img.admin_img').src = 'img/Admins/' + e.target.files[0].name;
+            document.querySelector('img.class_img').src = 'img/' + type + '/' + e.target.files[0].name;
         });
     });
-});
-
-/*app.component('school', {
-    template: `<ul ng-repeat="book in my.books">
-                    <li><a ng-href="/book/{{book.id}}">{{book.name}}</a><img ng-src="{{book.pic}}" alt="book pic" height="42" width="42"></li>
-               </ul>`,
-    controller: function($http) {
-        this.books = [];
-        $http({url: '/school'}).then(function (response) {
-            console.log(response);
-            this.books = response.data;
-        }.bind(this))
-    },
-    controllerAs: "my",
-})*/
-
+}
