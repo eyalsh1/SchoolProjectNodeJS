@@ -66,9 +66,8 @@ app.controller('loginCtrl', function($scope, $rootScope, $state, $http) {
     };
 });
 
-app.controller("myCtrl", function($scope) {
-
-});
+/*app.controller("myCtrl", function($scope) {
+});*/
 
 app.controller('schoolCtrl', function($scope, $rootScope, $http) {
     //console.log("schoolCtrl");
@@ -126,14 +125,16 @@ app.controller('adminCtrl', function($scope, $http) {
     //console.log($scope);
     //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
     $http({url: '/admin/' + $scope.$resolve.$stateParams.id}).then(function (response) {
-        //var data = response.data[0];
-        $scope.name = response.data[0].name;
-        $scope.phone = response.data[0].phone;
-        $scope.email = response.data[0].email;
-        $scope.password = response.data[0].password;
-        $scope.image = response.data[0].image;
-        $scope.role = response.data[0].role; 
-        //console.log(data);
+        //console.log(response.data[0]);
+        $scope.name = response.data[0][0].name;
+        $scope.phone = response.data[0][0].phone;
+        $scope.email = response.data[0][0].email;
+        $scope.image = response.data[0][0].image;
+        $scope.password = response.data[0][0].password;
+        $scope.role_id = response.data[0][0].role_id;
+        $scope.role_name = response.data[0][0].role;
+        $scope.roles = response.data[1];
+        //console.log(response.data[1]);
     }.bind(this));
 });
 
