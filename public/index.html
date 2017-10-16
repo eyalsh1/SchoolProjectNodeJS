@@ -32,7 +32,7 @@
                     <ul class="nav navbar-nav navbar-right" ng-show="IsVisible">
                         <li><a ui-sref="login"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
                         <li><figure>
-                            <img src="img/Admins/{{loginImage}}" alt="manager_img" width="100px" height="100px">
+                            <img ng-src="img/Admins/{{loginImage}}" alt="manager_img" width="100px" height="100px">
                             <figcaption style="color:red;">{{loginName}}, {{loginRole}}</figcaption>
                         </figure></li>
                     </ul>

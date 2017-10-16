@@ -127,6 +127,13 @@ app.post('/addCourse', urlParse, function (req, res) {
     QuerySQL(`INSERT INTO courses (name, description, image) VALUES (?, ?, ?)`, [req.body.name, req.body.description, req.body.image], res);
 });
 
+app.post('/addStudent', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`INSERT INTO students (name, phone, email, image, course_id) VALUES (?, ?, ?, ?, ?)`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.course_id], res);
+});
+
 function QuerySQL(query, params, res) {
     con.query(
         query, params,
