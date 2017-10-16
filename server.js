@@ -120,6 +120,13 @@ app.post('/upload/:type', upload.single('img'), function (req, res) {
 	}
 });
 
+app.post('/addCourse', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`INSERT INTO courses (name, description, image) VALUES (?, ?, ?)`, [req.body.name, req.body.description, req.body.image], res);
+});
+
 function QuerySQL(query, params, res) {
     con.query(
         query, params,

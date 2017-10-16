@@ -33,12 +33,20 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         controller : 'addAdminCtrl'
     }).state('addStudent', {
         url : '/student/add',
-        templateUrl : 'addStudent.html',
+        templateUrl : 'addEditStudent.html',
         controller : 'addStudentCtrl'
+    }).state('editStudent', {
+        //url : '/course/:id',
+        templateUrl : 'addEditStudent.html',
+        controller : 'editStudentCtrl'
     }).state('addCourse', {
         url : '/course/add',
-        templateUrl : 'addCourse.html',
+        templateUrl : 'addEditCourse.html',
         controller : 'addCourseCtrl'
+    }).state('editCourse', {
+        //url : '/course/:id',
+        templateUrl : 'addEditCourse.html',
+        controller : 'editCourseCtrl'
     });
 
     $locationProvider.html5Mode(true);
@@ -159,14 +167,64 @@ app.controller('addAdminCtrl', function($scope, $http) {
 });
 
 app.controller('addStudentCtrl', function($scope, $http) {
+    $scope.title = "Add";
+    $scope.deleteBtnVisible = false;
     $http({url: '/courses'}).then(function (response) {
         $scope.courses = response.data;
     }.bind(this));
     UploadFile('Students');
 });
 
-app.controller('addCourseCtrl', function($scope, $http) {
+app.controller('addCourseCtrl', function($scope, $http, $state) {
+    $scope.title = "Add";
+    $scope.deleteBtnVisible = false;
     UploadFile('Courses');
+
+    $scope.formSubmit = function() {
+        var img = document.querySelector('img.class_img').src.split("/");
+        //console.log("addCourseCtrl:" + $scope.name + "," + $scope.description + "," + img[img.length-1]);
+        $http({
+            url: '/addCourse',
+            method: "POST",
+            data: $.param({ name: $scope.name, description: $scope.description, image: img[img.length-1] }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            $state.transitionTo('school');
+        }.bind(this));
+    };
+});
+
+app.controller('editCourseCtrl', function($scope, $http, $state) {
+    $scope.title = "Edit";
+    $scope.deleteBtnVisible = true;
+    //console.log($scope);
+    //UploadFile('Courses');
+
+    /*$http({url: '/course/' + $scope.$resolve.$stateParams.id}).then(function (response) {
+        //console.log(response.data[0]);
+        $scope.name = response.data[0][0].name;
+        $scope.description = response.data[0][0].description;
+        $scope.image = response.data[0][0].image;
+        //console.log(response.data[1]);
+        $scope.students = response.data[1];
+    }.bind(this)); */
+    /*$scope.formSubmit = function() {
+        var img = document.querySelector('img.class_img').src.split("/");
+        //console.log("addCourseCtrl:" + $scope.name + "," + $scope.description + "," + img[img.length-1]);
+        $http({
+            url: '/addCourse',
+            method: "POST",
+            data: $.param({ name: $scope.name, description: $scope.description, image: img[img.length-1] }),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function (response) {
+            $state.transitionTo('school');
+        }.bind(this));
+    };*/
+});
+
+app.controller('editStudentCtrl', function($scope, $http, $state) {
+    $scope.title = "Edit";
+    $scope.deleteBtnVisible = true;
 });
 
 function UploadFile(type) {
