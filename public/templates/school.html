@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-sm-6">   
+        <div class="col-sm-5"><h4>Courses</h4></div>
+        <div class="col-sm-1"><a ui-sref="addCourse"><button type="button" class="btn">+</button></a></div>
+        <div class="col-sm-5"><h4>Students</h4></div>
+        <div class="col-sm-1"><a ui-sref="addStudent"><button type="button" class="btn">+</button></a></div>
+
+        <div class="col-sm-6">
+            <ul ng-repeat="course in courses">
+                <a href="/course/{{course.id}}">
+                    <figure>
+                        <img ng-src="img/courses/{{course.image}}" width=100% height=200px>
+                        <figcaption style=color:blue;>{{course.name}}</figcaption>
+                        <figcaption style=color:blue;>{{course.description}}</figcaption>
+                    </figure>
+                </a>
+            </ul>
+        </div>  
+
+        <div class="col-sm-6">
+            <ul ng-repeat="student in students">
+                <a href="/student/{{student.id}}">
+                    <figure>
+                        <img ng-src="img/students/{{student.image}}" width=100% height=200px>
+                        <figcaption style=color:blue;>{{student.name}}</figcaption>
+                        <figcaption style=color:blue;>{{student.phone}}</figcaption>
+                    </figure>
+                </a>
+            </ul>
+        </div>  
+    </div>
+        
+    <div class="col-sm-6">
+        <!--<ui-view>-->
+            <div class="col-sm-12"><h1>School summary</h1></div>
+            <div class="col-sm-12"><h2>There are:</h2></div>
+            <div class="col-sm-12"><h3>{{courses.length}} Courses & {{students.length}} Students</h3></div>
+        <!--</ui-view>-->
+    </div>
+</div>
+ 

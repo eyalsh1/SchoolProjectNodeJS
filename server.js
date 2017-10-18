@@ -96,7 +96,7 @@ app.get('/course/:id', urlParse, function (req, res) {
 });
 
 app.get('/student/:id', urlParse, function (req, res) {
-    QuerySQL(`SELECT students.name as name, students.phone as phone, students.email as email, students.image as image, courses.name as course 
+    QuerySQL(`SELECT students.name as name, students.phone as phone, students.email as email, students.image as image, students.course_id as course_id, courses.name as course_name 
     FROM students INNER JOIN courses on students.course_id = courses.id WHERE students.id=?`, [req.params['id']], res);
 });
 
@@ -127,11 +127,60 @@ app.post('/addCourse', urlParse, function (req, res) {
     QuerySQL(`INSERT INTO courses (name, description, image) VALUES (?, ?, ?)`, [req.body.name, req.body.description, req.body.image], res);
 });
 
+app.post('/editCourse', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`UPDATE courses SET name=?, description=?, image=? WHERE id=?`, [req.body.name, req.body.description, req.body.image, req.body.course_id], res);
+});
+
+app.post('/deleteCourse', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`DELETE FROM courses WHERE id=?`, [req.body.course_id], res);
+});
+
 app.post('/addStudent', urlParse, function (req, res) {
     if (!req.body) 
         return res.sendStatus(400);
         
     QuerySQL(`INSERT INTO students (name, phone, email, image, course_id) VALUES (?, ?, ?, ?, ?)`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.course_id], res);
+});
+
+app.post('/editStudent', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`UPDATE students SET name=?, phone=?, email=?, image=?, course_id=? WHERE id=?`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.course_id, req.body.student_id], res);
+});
+
+app.post('/deleteStudent', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`DELETE FROM students WHERE id=?`, [req.body.student_id], res);
+});
+
+app.post('/addAdmin', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`INSERT INTO admins (name, phone, email, image, role_id, password) VALUES (?, ?, ?, ?, ?, ?)`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.role_id, req.body.password], res);
+});
+
+app.post('/editAdmin', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`UPDATE admins SET name=?, phone=?, email=?, image=?, role_id=?, password=? WHERE id=?`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.course_id, req.body.student_id], res);
+});
+
+app.post('/deleteAdmin', urlParse, function (req, res) {
+    if (!req.body) 
+        return res.sendStatus(400);
+        
+    QuerySQL(`DELETE FROM admins WHERE id=?`, [req.body.admin_id], res);
 });
 
 function QuerySQL(query, params, res) {
