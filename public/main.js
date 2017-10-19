@@ -104,7 +104,7 @@ app.controller('addAdminCtrl', function($scope, $http, $state) {
 
 app.controller('editAdminCtrl', function($scope, $http, $state) {
     //console.log($scope);
-    //$scope.msg = "Id = " + $scope.$resolve.$stateParams.id;
+    //console.log("AdminId=" + $scope.$resolve.$stateParams.id);
     $scope.title = "Edit";
     $scope.deleteBtnVisible = true;
     $http({url: '/admin/' + $scope.$resolve.$stateParams.id}).then(function (response) {
@@ -115,7 +115,7 @@ app.controller('editAdminCtrl', function($scope, $http, $state) {
         $scope.image = response.data[0][0].image;
         $scope.password = response.data[0][0].password;
         $scope.role_id = response.data[0][0].role_id;
-        $scope.role_name = response.data[0][0].role;
+        $scope.role_name = response.data[0][0].role_name;
         $scope.roles = response.data[1];
         //console.log(response.data[1]);
     }.bind(this));
@@ -124,10 +124,11 @@ app.controller('editAdminCtrl', function($scope, $http, $state) {
 
     $scope.saveClick = function() {
         var img = document.querySelector('img.class_img').src.split("/");
+        //console.log("editAdminCtrl:" + $scope.name + "," + $scope.phone + "," + $scope.email + "," + $scope.password + "," + $scope.role_id + "," + $scope.role_name + ","+ img[img.length-1] + ',' + $scope.$resolve.$stateParams.id);
         $http({
             url: '/editAdmin',
             method: "POST",
-            data: $.param({ name: $scope.name, phone: $scope.phone, email: $scope.email, password: $scope.password, role_id: $scope.role_id, image: img[img.length-1] }),
+            data: $.param({ name: $scope.name, phone: $scope.phone, email: $scope.email, password: $scope.password, role_id: $scope.role_id, image: img[img.length-1], admin_id: $scope.$resolve.$stateParams.id }),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function (response) {
             $state.transitionTo('administration');

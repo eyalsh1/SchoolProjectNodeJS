@@ -102,7 +102,7 @@ app.get('/student/:id', urlParse, function (req, res) {
 
 app.get('/admin/:id', urlParse, function (req, res) {
     QuerySQL(`SELECT admins.name as name, admins.phone as phone, admins.email as email, admins.image as image,
-    admins.password as password, admins.role_id as role_id, roles.name as role FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=?;
+    admins.password as password, admins.role_id as role_id, roles.name as role_name FROM admins INNER JOIN roles on roles.id = admins.role_id WHERE admins.id=?;
     SELECT * FROM roles`, [req.params['id']], res);
 });
 
@@ -166,14 +166,32 @@ app.post('/addAdmin', urlParse, function (req, res) {
     if (!req.body) 
         return res.sendStatus(400);
         
-    QuerySQL(`INSERT INTO admins (name, phone, email, image, role_id, password) VALUES (?, ?, ?, ?, ?, ?)`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.role_id, req.body.password], res);
+    QuerySQL(`INSERT INTO admins (name, phone, email, image, role_id, password) VALUES (?, ?, ?, ?, ?, ?)`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.role_id, passwordHash.generate(req.body.password)], res);
 });
 
 app.post('/editAdmin', urlParse, function (req, res) {
     if (!req.body) 
         return res.sendStatus(400);
-        
-    QuerySQL(`UPDATE admins SET name=?, phone=?, email=?, image=?, role_id=?, password=? WHERE id=?`, [req.body.name, req.body.phone, req.body.email, req.body.image, req.body.course_id, req.body.student_id], res);
+
+    con.query(
+        `SELECT password FROM admins WHERE id=?`, [req.body.admin_id], 
+        function (error, results) {
+            if (error) {
+                console.log("error ocurred", error);
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred!"
+                })
+            } else {
+                var password;
+                if (results[0].password === req.body.password)
+                    password = req.body.password; // password wasn't changed
+                else
+                    password = passwordHash.generate(req.body.password); // password was changed
+                QuerySQL(`UPDATE admins SET name=?, phone=?, email=?, password=?, role_id=?, image=? WHERE id=?`, [req.body.name, req.body.phone, req.body.email, password, req.body.role_id, req.body.image, req.body.admin_id], res);
+            
+            }
+        });
 });
 
 app.post('/deleteAdmin', urlParse, function (req, res) {
@@ -184,6 +202,8 @@ app.post('/deleteAdmin', urlParse, function (req, res) {
 });
 
 function QuerySQL(query, params, res) {
+    //console.log(query);
+    //console.log(params);
     con.query(
         query, params,
         function (error, results) {
