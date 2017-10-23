@@ -6,6 +6,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     .state('login', {
         url : '/login',
         component: 'login'
+    })
+    .state('logout', {
+        url : '/logout',
+        controller: 'logoutCtrl'
     }).state('school', {
         url : '/school',
         component: 'school'
@@ -49,6 +53,13 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
 /*app.controller("myCtrl", function($scope) {
 });*/
+
+app.controller('logoutCtrl', function($scope, $state, $http) {
+    //console.log("Logout");
+    $http({url: '/logout'}).then(function (response) {
+        $state.transitionTo('login');
+    }.bind(this));
+});
 
 app.controller('courseCtrl', function($scope, $rootScope, $http) {
     //console.log($scope);

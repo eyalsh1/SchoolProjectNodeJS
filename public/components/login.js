@@ -24,6 +24,13 @@ angular.module('myApp').component('login', {
                     $rootScope.loginName = response.data.data[0].name;
                     $rootScope.loginRole = response.data.data[0].role;
                     $rootScope.loginImage = response.data.data[0].image;
+                    
+                    /*console.log($rootScope.loginRole);
+                    if ($rootScope.loginRole === "sales")
+                        $scope.adminBtnVisible = false;
+                    else
+                        $scope.adminBtnVisible = true;*/
+
                     $state.transitionTo('school');
                 }
             }.bind(this));        

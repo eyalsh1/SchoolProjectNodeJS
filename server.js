@@ -2,6 +2,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 const multer = require('multer');
 const express = require('express');
+const session = require('express-session')
 const bodyParser = require('body-parser');
 const passwordHash = require('password-hash');
 const upload = multer({dest: './public/img/tmp'});
@@ -10,6 +11,12 @@ const app = express();
 const urlParse = bodyParser.urlencoded({extended: false});
 
 app.use(express.static('public'));
+
+app.use(session({
+	secret: 'SchoolAdmin',
+	resave: true,
+	saveUninitialized: true
+}));
 
 // create connection
 const con = mysql.createConnection(
@@ -52,6 +59,7 @@ app.post('/login', urlParse, function (req, res) {
                 if (results.length > 0) {
                     //if (results[0].password == password) {
 					if (passwordHash.verify(password, results[0].password)) {
+                        req.session.role = results[0].role;
                         res.send({
                             "code":200,
                             "success":"login sucessfull",
@@ -71,6 +79,16 @@ app.post('/login', urlParse, function (req, res) {
                 }
             }
         });
+});
+
+app.get('/logout', urlParse, function (req, res) {
+    //console.log("logout...");
+    req.session.destroy();
+    res.sendStatus(200);
+    /*res.send({
+        "code":200,
+        "success":"logout sucessfull"
+    });*/
 });
 
 app.get('/courses', urlParse, function (req, res) {

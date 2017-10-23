@@ -30,10 +30,10 @@
                     </div>
                     <ul class="nav navbar-nav" style="margin-left: 100px; margin-top: 24px" ng-show="IsVisible">
                         <li><a class="btn btn-default" ui-sref="school" style="width: 150px">School</a></li>
-                        <li><a class="btn btn-default" ui-sref="administration" style="width: 150px; margin-left: 10px">Administration</a></li>
+                        <li><a class="btn btn-default" ui-sref="administration" style="width: 150px; margin-left: 10px" ng-show="adminBtnVisible">Administration</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" ng-show="IsVisible">
-                        <li><a ui-sref="login"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
+                        <li><a ui-sref="logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
                         <li><figure>
                             <img ng-src="img/Admins/{{loginImage}}" alt="manager_img" width="100px" height="100px">
                             <figcaption style="color:red;">{{loginName}}, {{loginRole}}</figcaption>
